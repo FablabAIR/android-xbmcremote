@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!--
+		Copyright (C) 2005-2009 Team XBMC http://xbmc.org This Program is free
+		software; you can redistribute it and/or modify it under the terms of
+		the GNU General Public License as published by the Free Software
+		Foundation; either version 2, or (at your option) any later version.
+
+		This Program is distributed in the hope that it will be useful, but
+		WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+		General Public License for more details. You should have received a
+		copy of the GNU General Public License along with XBMC Remote; see the
+		file license. If not, write to the Free Software Foundation, 675 Mass
+		Ave, Cambridge, MA 02139, USA. http://www.gnu.org/copyleft/gpl.html
+	-->
+<resources>
+	<!-- Widget Styles -->
+	<style name="SlidingTabWidget">
+		<item name="separationWidth">75</item>
+	</style>
+	<style name="SlidingTabScrollView">
+	</style>
+
+	<style name="Theme.NoBackground.NoTitleBar" parent="android:Theme.NoTitleBar">
+		<item name="android:windowBackground">@null</item>
+	</style>
+    
+    <style name="standard_list">
+    	<item name="android:fadingEdge">none</item>
+    	<item name="android:scrollbars">none</item>
+    	<item name="android:divider">#a0a0a0</item>
+    	<item name="android:dividerHeight">1dip</item>
+    </style>
+	<style name="details_label">
+		<item name="android:textSize">10dip</item>
+		<item name="android:textColor">#aaffffff</item>
+	</style>
+	<style name="details_value">
+		<item name="android:paddingBottom">7dip</item>
+		<item name="android:textColor">#ffffffff</item>
+	</style>
+	<style name="text_medium" parent="@android:style/TextAppearance.Medium">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+	</style>
+	<style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+	<style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+</resources>
