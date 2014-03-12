@@ -54,17 +54,19 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 		//obj = sort(obj.p(PARAM_PROPERTIES, arr().add("director").add("file").add("genre").add("imdbnumber").add("playcount").add("rating").add("runtime").add("thumbnail").add("year")), sortBy, sortOrder);
 		
 		ArrayList<Addon> addons = new ArrayList<Addon>();
-//		final JsonNode result = mConnection.getJson(manager, "Addons.GetAddons", obj());
-//		final JsonNode jsonAddons = result.get("addons");
-//		if(jsonAddons != null){
-//			for (Iterator<JsonNode> i = jsonAddons.getElements(); i.hasNext();) {
-//				JsonNode jsonAddon = (JsonNode)i.next();
-//				System.out.println(getString(jsonAddon, "addonid"));
-//				addons.add(getString(jsonAddon, "addonid"));
-//			}
-//		}
+		System.out.println("1111");
+		final JsonNode result = mConnection.getJson(manager, "Addons.GetAddons", obj());
+		System.err.println(result.size());
+		final JsonNode jsonAddons = result.get("addons");
+		if(jsonAddons != null){
+			for (Iterator<JsonNode> i = jsonAddons.getElements(); i.hasNext();) {
+				JsonNode jsonAddon = (JsonNode)i.next();
+				System.out.println(getString(jsonAddon, "addonid"));
+				addons.add(new Addon(getString(jsonAddon, "addonid"), getString(jsonAddon, "type")));
+			}
+		}
 		
-		addons.add(new Addon("pvr.vdr.vnsi", "xbmc.pvrclient"));
+
 		addons.add(new Addon("pvr.argustv", "xbmc.pvrclient"));
 		return addons;
 	}
