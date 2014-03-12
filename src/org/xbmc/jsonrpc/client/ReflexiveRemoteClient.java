@@ -41,7 +41,6 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 		if(jsonAddons != null){
 			for (Iterator<JsonNode> i = jsonAddons.getElements(); i.hasNext();) {
 				JsonNode jsonAddon = (JsonNode)i.next();
-				System.out.println(getString(jsonAddon, "addonid"));
 				addons.add(new Addon(getString(jsonAddon, "addonid"), getString(jsonAddon, "type")));
 			}
 		}
@@ -51,6 +50,6 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 
 	@Override
 	public Boolean executeAddon(INotifiableManager manager, String addonId) {
-		return mConnection.getString(manager, "Addons.ExecuteAddon", obj().p("addonid:",addonId)).equals("OK");
+		return mConnection.getString(manager, "Addons.ExecuteAddon", obj().p("addonid",addonId)).equals("OK");
 	}
 }
