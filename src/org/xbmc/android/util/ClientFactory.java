@@ -32,6 +32,7 @@ import org.xbmc.api.data.IControlClient;
 import org.xbmc.api.data.IEventClient;
 import org.xbmc.api.data.IInfoClient;
 import org.xbmc.api.data.IMusicClient;
+import org.xbmc.api.data.IReflexiveRemoteClient;
 import org.xbmc.api.data.ITvShowClient;
 import org.xbmc.api.data.IVideoClient;
 import org.xbmc.api.info.SystemInfo;
@@ -128,6 +129,21 @@ public abstract class ClientFactory {
 			return createHttpClient(manager).shows;
 		}
 	}
+	
+	public static IReflexiveRemoteClient getReflexiveRemoteClient(INotifiableManager manager, Context context) throws WifiStateException {
+		assertWifiState(context);
+		probeQueryApiType(manager);
+		return createJsonClient(manager).reflexiveRemoteClient;
+		/*switch (sApiType) {
+		case API_TYPE_JSONRPC:
+			return createJsonClient(manager).;
+		case API_TYPE_UNSET:
+		case API_TYPE_HTTPIAPI:
+		default:
+			return createHttpClient(manager).shows;
+		}*/
+	}
+	
 	
 	private static void assertWifiState(Context context) throws WifiStateException {
 		if (context != null && HostFactory.host != null && HostFactory.host.wifi_only){
