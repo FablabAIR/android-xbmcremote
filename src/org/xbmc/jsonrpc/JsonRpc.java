@@ -25,6 +25,7 @@ import org.xbmc.api.object.Host;
 import org.xbmc.jsonrpc.client.ControlClient;
 import org.xbmc.jsonrpc.client.InfoClient;
 import org.xbmc.jsonrpc.client.MusicClient;
+import org.xbmc.jsonrpc.client.ReflexiveRemoteClient;
 import org.xbmc.jsonrpc.client.TvShowClient;
 import org.xbmc.jsonrpc.client.VideoClient;
 
@@ -64,6 +65,11 @@ public class JsonRpc {
 	public final TvShowClient shows;
 	
 	/**
+	 * Use this client for anything tv show related
+	 */
+	public final ReflexiveRemoteClient reflexiveRemoteClient;
+	
+	/**
 	 * Construct with all paramaters
 	 * @param host    Connection data of the host
 	 * @param timeout Read timeout
@@ -77,11 +83,16 @@ public class JsonRpc {
 			connection = Connection.getInstance(null, 0);
 		}
 		connection.setTimeout(timeout);
+
+		reflexiveRemoteClient = new ReflexiveRemoteClient(connection);
+
 		info = new InfoClient(connection);
 		music = new MusicClient(connection);
 		video = new VideoClient(connection);
 		control = new ControlClient(connection);
 		shows = new TvShowClient(connection);
+
+
 	}
 	
 	/**
@@ -94,5 +105,6 @@ public class JsonRpc {
 		video.setHost(host);
 		control.setHost(host);
 		shows.setHost(host);
+		reflexiveRemoteClient.setHost(host);
 	}
 }
