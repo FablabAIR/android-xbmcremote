@@ -1,6 +1,7 @@
 package org.xbmc.android.remote.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.xbmc.api.business.DataResponse;
 import org.xbmc.api.business.INotifiableManager;
@@ -36,6 +37,16 @@ public class ReflexiveRemoteManager extends AbstractManager implements IReflexiv
 	}
 	
 
+	public void getPluginsTest(final DataResponse<ArrayList<Addon>> response,final Context context) {
+		mHandler.post(new Command<ArrayList<Addon>>(response, this) {
+			@Override
+			public void doRun() throws Exception { 
+				final ArrayList<Addon> listAddon = new ArrayList<Addon>(Arrays.asList(new Addon("name", "int")));
+				response.value = listAddon;
+			}
+		});
+	}
+	
 	@Override
 	public void executePlugins(final DataResponse<Boolean> response,
 			final Context context,final String addonid) {

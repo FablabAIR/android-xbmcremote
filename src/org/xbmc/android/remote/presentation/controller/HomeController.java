@@ -379,8 +379,8 @@ public class HomeController extends AbstractController implements INotifiableCon
 						intent = new Intent(v.getContext(), NFCWriterActivity.class);
 						break;
 					case HOME_ACTION_ADDON:
-						intent = new Intent(v.getContext(), AddonsActivity.class);
-						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonsController());
+						intent = new Intent(v.getContext(),ListActivity.class);
+						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonListController());
 						break;
 				}
 				if (intent != null) {

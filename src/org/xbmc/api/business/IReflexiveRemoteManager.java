@@ -20,7 +20,7 @@ public interface IReflexiveRemoteManager extends IManager {
 	 * @param response Response object
 	 */
 	public void getPlugins(final DataResponse<ArrayList<Addon>> response, final Context context);
-	
+	public void getPluginsTest(final DataResponse<ArrayList<Addon>> response,final Context context);
 	/**
 	 * Gets all movies from database
 	 * @param response Response object

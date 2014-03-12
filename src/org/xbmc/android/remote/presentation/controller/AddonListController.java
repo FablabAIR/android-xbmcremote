@@ -7,16 +7,21 @@ import java.util.List;
 
 import org.xbmc.android.remote.R;
 import org.xbmc.android.remote.business.ManagerFactory;
+import org.xbmc.android.remote.presentation.activity.AddonsActivity;
+import org.xbmc.android.remote.presentation.activity.DialogFactory;
 import org.xbmc.android.remote.presentation.activity.ListActivity;
 import org.xbmc.android.remote.presentation.activity.NowPlayingActivity;
 import org.xbmc.android.remote.presentation.activity.RemoteActivity;
+import org.xbmc.android.remote.presentation.controller.ListController.QueryResponse;
 import org.xbmc.android.remote.presentation.widget.OneLabelItemView;
+import org.xbmc.android.remote.presentation.widget.ThreeLabelsItemView;
 import org.xbmc.api.business.DataResponse;
 import org.xbmc.api.business.IControlManager;
 import org.xbmc.api.business.IInfoManager;
 import org.xbmc.api.business.IReflexiveRemoteManager;
 import org.xbmc.api.data.IReflexiveRemoteClient;
 import org.xbmc.api.info.FileTypes;
+import org.xbmc.api.info.SystemInfo;
 import org.xbmc.api.object.Addon;
 import org.xbmc.api.object.Album;
 import org.xbmc.api.object.FileLocation;
@@ -36,15 +41,16 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 @SuppressWarnings("serial")
-public class AddonsController extends ListController implements IController {
+public class AddonListController extends ListController implements IController {
 
 	private IReflexiveRemoteManager mReflexiveManager;
 	private HashMap<String, Addon> mFileItems;
 	protected ListAdapter mAdapter;
-	private Album album;
+	public static final int ITEM_CONTEXT_INFO = 1;
 	private ArrayList<Addon> listAddon = new ArrayList<Addon>(Arrays.asList(new Addon("name","int")));
 	
 	public void onCreate(Activity activity, Handler handler, AbsListView list) {
@@ -59,7 +65,24 @@ public class AddonsController extends ListController implements IController {
 					if (mFileItems == null)
 						return;
 					//setListAdapter(new FileItemAdapter(mActivity, listAddon));
-					mActivity.startActivity(new Intent(mActivity, RemoteActivity.class));
+					
+//					Intent intent = new Intent(mActivity, AddonsActivity.class);
+//					intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
+//					mActivity.startActivity(intent);
+					
+					DataResponse<Boolean> response = new DataResponse<Boolean>() {
+                        public void run() {
+                            if (value) {
+                                System.err.println("Execution Plugin OK");
+                            } else {
+                                System.out.println("Execution Plugin Failed");
+                            }
+                        }
+                    };
+                    
+                    System.out.println(((Addon) mList.getItemAtPosition(position)).name);
+                    mReflexiveManager.executePlugins(response, mActivity,((Addon) mList.getItemAtPosition(position)).name);
+				
 				}
 			});
 		}
@@ -116,18 +139,25 @@ public class AddonsController extends ListController implements IController {
             ((AdapterView<ListAdapter>) mList).setAdapter(adapter);
         }
     }
-	
+
 	@Override
 	public void onContextItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		// TODO Auto-generated method stub
-		
+	}
+
+	public void onActivityPause() {
+		mReflexiveManager.setController(null);
+		super.onActivityPause();
+	}
+
+	public void onActivityResume(Activity activity) {
+		super.onActivityResume(activity);
+		mReflexiveManager.setController(this);
 	}
 
 }
