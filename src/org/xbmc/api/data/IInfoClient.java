@@ -63,6 +63,7 @@ public interface IInfoClient extends IClient {
 	 */
 	public ArrayList<FileLocation> getShares(INotifiableManager manager, int mediaType);
 	
+	
 	/**
 	 * Returns URI of the currently playing's thumbnail.
 	 * @return

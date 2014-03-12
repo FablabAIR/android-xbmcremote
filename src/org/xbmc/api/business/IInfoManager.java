@@ -50,6 +50,9 @@ public interface IInfoManager extends IManager {
 	 */
 	public void getShares(final DataResponse<ArrayList<FileLocation>> response, final int mediaType, final Context context);
 	
+	
+	public void getSharesString(final DataResponse<ArrayList<String>> response, final Context context);
+	
 	/**
 	 * Returns the contents of a directory
 	 * @param response Response object

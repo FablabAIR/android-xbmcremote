@@ -22,13 +22,16 @@
 package org.xbmc.android.remote.presentation.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import org.xbmc.android.remote.R;
 import org.xbmc.android.remote.business.AbstractManager;
 import org.xbmc.android.remote.business.ManagerFactory;
+import org.xbmc.android.remote.presentation.activity.AddonsActivity;
 import org.xbmc.android.remote.presentation.activity.GestureRemoteActivity;
 import org.xbmc.android.remote.presentation.activity.HomeActivity;
 import org.xbmc.android.remote.presentation.activity.HostSettingsActivity;
@@ -108,6 +111,9 @@ public class HomeController extends AbstractController implements INotifiableCon
 	private static final int HOME_ACTION_TVSHOWS = 7;
 	private static final int HOME_ACTION_POWERDOWN = 8;
 	private static final int HOME_ACTION_NFC = 9;
+	private static final int HOME_ACTION_ADDON = 10;
+	
+	private static List<Integer> listMenu;
 	
 	private IInfoManager mInfoManager;
 	
@@ -131,7 +137,9 @@ public class HomeController extends AbstractController implements INotifiableCon
 		super.onCreate(activity, handler);
 		mInfoManager = ManagerFactory.getInfoManager(this);
 		mMenuGrid = menuGrid;
+		listMenu = new ArrayList<Integer>(Arrays.asList(1,3,4,5,9,10));
 		setupMenuItems(menuGrid);
+		
 	}
 	
 	public View.OnClickListener getOnHostChangeListener() {
@@ -221,23 +229,17 @@ public class HomeController extends AbstractController implements INotifiableCon
 
 		final ArrayList<HomeItem> homeItems = new ArrayList<HomeItem>();
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
-		if (prefs.getBoolean("setting_show_home_music", true))
-			homeItems.add(new HomeItem(HOME_ACTION_MUSIC, R.drawable.icon_home_music, "Music", "Listen to"));
-		if (prefs.getBoolean("setting_show_home_movies", true))
-			homeItems.add(new HomeItem(HOME_ACTION_VIDEOS, R.drawable.icon_home_movie, "Movies", "Watch your"));
-		if (prefs.getBoolean("setting_show_home_tv", true))
-			homeItems.add(new HomeItem(HOME_ACTION_TVSHOWS, R.drawable.icon_home_tv, "TV Shows", "Watch your"));
-		if (prefs.getBoolean("setting_show_home_pictures", true))
-			homeItems.add(new HomeItem(HOME_ACTION_PICTURES, R.drawable.icon_home_picture, "Pictures", "Browse your"));
+		
+		for (Integer menu : listMenu) {
+			setMenu(homeItems, prefs, menu);
+		}
+		
 		//créer une icone dans le menu home
-		if (prefs.getBoolean("setting_show_home_test", true))
-			homeItems.add(new HomeItem(HOME_ACTION_NFC, R.drawable.icon_nfc, "NFC", "Browse your"));
+		
 
 		prefs.registerOnSharedPreferenceChangeListener(this);
 		homeItems.add(new HomeItem(HOME_ACTION_NOWPLAYING, R.drawable.icon_home_playing, "Now Playing", "See what's"));
 		homeItems.add(remote);
-		if (prefs.getBoolean("setting_show_home_powerdown", false))
-			homeItems.add(new HomeItem(HOME_ACTION_POWERDOWN, R.drawable.icon_home_power, "Power Off", "Turn your XBMC off"));
 		
 		final ArrayList<HomeItem> offlineItems = new ArrayList<HomeItem>();
 		offlineItems.add(remote);
@@ -252,6 +254,55 @@ public class HomeController extends AbstractController implements INotifiableCon
 		mOfflineMenu = new HomeAdapter(mActivity, offlineItems);
 		
 		setHomeAdapter(menuGrid, mOfflineMenu);
+	}
+	
+	private void setMenu(ArrayList<HomeItem> homeItems, SharedPreferences prefs, int menu){
+		switch (menu) {
+		case 1:
+			if (prefs.getBoolean("setting_show_home_music", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_MUSIC, R.drawable.icon_home_music, "Music", "Listen to"));
+				PreferenceManager.setDefaultValues(mActivity, "setting_show_home_music", menu, R.xml.preferences, true);
+			}
+			break;
+		case 2:
+			if (prefs.getBoolean("setting_show_home_movies", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_VIDEOS, R.drawable.icon_home_movie, "Movies", "Watch your"));
+				PreferenceManager.setDefaultValues(mActivity, "setting_show_home_movies", menu, R.xml.preferences, true);
+			}
+			break;
+		case 7:
+			if (prefs.getBoolean("setting_show_home_tv", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_TVSHOWS, R.drawable.icon_home_tv, "TV Shows", "Watch your"));
+				PreferenceManager.setDefaultValues(mActivity, "setting_show_home_tv", menu, R.xml.preferences, true);
+			}
+			break;
+		case 3:
+			if (prefs.getBoolean("setting_show_home_pictures", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_PICTURES, R.drawable.icon_home_picture, "Pictures", "Browse your"));
+				PreferenceManager.setDefaultValues(mActivity, "setting_show_home_pictures", menu, R.xml.preferences, true);
+			}
+			break;
+		case 8:
+			if (prefs.getBoolean("setting_show_home_powerdown", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_POWERDOWN, R.drawable.icon_home_power, "Power Off", "Turn your XBMC off"));
+				PreferenceManager.setDefaultValues(mActivity, "setting_show_home_powerdown", menu, R.xml.preferences, true);
+			}
+			break;
+		case 9:
+			if (prefs.getBoolean("setting_show_home_nfc", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_NFC, R.drawable.icon_home_nfc, "NFC", "Browse your"));
+				PreferenceManager.setDefaultValues(mActivity, "setting_show_home_nfc", menu, R.xml.preferences, true);
+			}
+			break;
+		case 10:
+			if (prefs.getBoolean("setting_show_home_addon", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_ADDON, R.drawable.icon_home_addon, "Addons", "Browse your"));
+				PreferenceManager.setDefaultValues(mActivity, "setting_show_home_addon", menu, R.xml.preferences, true);
+			}
+			break;
+		default:
+			break;
+		}
 	}
 	
 	/**
@@ -326,6 +377,12 @@ public class HomeController extends AbstractController implements INotifiableCon
 					// se déplacer dans une autres activités
 					case HOME_ACTION_NFC:
 						intent = new Intent(v.getContext(), NFCWriterActivity.class);
+						break;
+					case HOME_ACTION_ADDON:
+						intent = new Intent(v.getContext(), AddonsActivity.class);
+						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonsController());
+						intent.putExtra(ListController.EXTRA_SHARE_TYPE, MediaType.PICTURES);
+						intent.putExtra(ListController.EXTRA_PATH, "");
 						break;
 				}
 				if (intent != null) {

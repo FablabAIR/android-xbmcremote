@@ -22,6 +22,7 @@
 package org.xbmc.android.remote.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.xbmc.api.business.DataResponse;
 import org.xbmc.api.business.IInfoManager;
@@ -169,6 +170,18 @@ public class InfoManager extends AbstractManager implements IInfoManager, INotif
 			@Override
 			public void doRun() throws Exception { 
 				response.value = info(context).setGuiSettingBool(InfoManager.this, field, val);
+			}
+		});
+	}
+
+	@Override
+	public void getSharesString(final DataResponse<ArrayList<String>> response, final Context context) {
+		
+		mHandler.post(new Command<ArrayList<String>>(response, this) {
+			@Override
+			public void doRun() throws Exception {
+				ArrayList<String> list = new ArrayList<String>(Arrays.asList("toto","titi"));
+				response.value =list;
 			}
 		});
 	}

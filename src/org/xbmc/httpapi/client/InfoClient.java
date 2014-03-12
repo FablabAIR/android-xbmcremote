@@ -3,6 +3,8 @@ package org.xbmc.httpapi.client;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.xbmc.api.business.INotifiableManager;
 import org.xbmc.api.data.IInfoClient;
@@ -99,7 +101,7 @@ public class InfoClient implements IInfoClient {
 		}
 		return shares;
 	}
-	
+
 	public String getCurrentlyPlayingThumbURI(INotifiableManager manager) throws MalformedURLException, URISyntaxException {
 		final ArrayList<String> array = mConnection.getArray(manager, "GetCurrentlyPlaying", " ; ; ;true");
 		Boolean isSlideShow = false;
