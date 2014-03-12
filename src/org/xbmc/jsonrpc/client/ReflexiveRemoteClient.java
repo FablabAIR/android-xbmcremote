@@ -30,29 +30,9 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 		 activities.add(3);
 		return activities;
 	}
-
-//	@Override
-//	public ArrayList<String> getPlugins(INotifiableManager manager) {
-//
-//	
-//	//	JsonNode addons = mConnection.getJson(manager, "Addons.GetAddons", obj().p("params", ""));
-//		
-//		ObjNode obj = new ObjNode(FACTORY) ;
-//		//obj.p(PARAM_PROPERTIES, arr().add("director").add("file").add("genre").add("imdbnumber").add("playcount").add("rating").add("runtime").add("thumbnail").add("year"));
-//		
-//		ArrayList<String> addons = new ArrayList<String>();
-//		System.out.println(mConnection.toString());
-//		System.out.println("1");
-//		JsonNode result = mConnection.getJson(manager, "Addons.GetAddons");
-//		return addons ;
-//	}
 	
 	@Override
 	public ArrayList<Addon> getPlugins(INotifiableManager manager) {
-	//	JsonNode addons = mConnection.getJson(manager, "Addons.GetAddons", obj().p("params", ""));
-		
-		//obj = sort(obj.p(PARAM_PROPERTIES, arr().add("director").add("file").add("genre").add("imdbnumber").add("playcount").add("rating").add("runtime").add("thumbnail").add("year")), sortBy, sortOrder);
-		
 		ArrayList<Addon> addons = new ArrayList<Addon>();
 		System.out.println("1111");
 		final JsonNode result = mConnection.getJson(manager, "Addons.GetAddons", obj());
@@ -65,11 +45,12 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 				addons.add(new Addon(getString(jsonAddon, "addonid"), getString(jsonAddon, "type")));
 			}
 		}
-		
-
 		addons.add(new Addon("pvr.argustv", "xbmc.pvrclient"));
 		return addons;
 	}
-	
 
+	@Override
+	public Boolean executeAddon(INotifiableManager manager, String addonId) {
+		return mConnection.getString(manager, "Addons.ExecuteAddon", obj().p("addonid:",addonId)).equals("OK");
+	}
 }

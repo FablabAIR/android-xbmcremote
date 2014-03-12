@@ -25,5 +25,5 @@ public interface IReflexiveRemoteManager extends IManager {
 	 * Gets all movies from database
 	 * @param response Response object
 	 */
-	public void executePlugins(final DataResponse<ArrayList<String>> response, final Context context);
+	public void executePlugins(final DataResponse<Boolean> response, final Context context,final String addonid);
 }

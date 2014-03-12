@@ -6,6 +6,8 @@ import org.xbmc.api.business.DataResponse;
 import org.xbmc.api.business.INotifiableManager;
 import org.xbmc.api.business.IReflexiveRemoteManager;
 import org.xbmc.api.business.ISortableManager;
+import org.xbmc.api.data.IControlClient;
+import org.xbmc.api.data.IMusicClient;
 import org.xbmc.api.type.SortType;
 import org.xbmc.api.object.Addon;
 import org.xbmc.api.object.Album;
@@ -32,11 +34,17 @@ public class ReflexiveRemoteManager extends AbstractManager implements IReflexiv
 			}
 		});
 	}
+	
 
 	@Override
-	public void executePlugins(DataResponse<ArrayList<String>> response,
-			Context context) {
-		// TODO Auto-generated method stub
+	public void executePlugins(final DataResponse<Boolean> response,
+			final Context context,final String addonid) {
+		mHandler.post(new Command<Boolean>(response, this) {
+			@Override
+			public void doRun() throws Exception { 
+				response.value = refelexiveRemote(context).executeAddon(ReflexiveRemoteManager.this,addonid);
+			}
+		});
 		
 	}
 }

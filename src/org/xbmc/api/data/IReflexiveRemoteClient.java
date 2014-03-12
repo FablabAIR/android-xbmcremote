@@ -17,7 +17,7 @@ public interface IReflexiveRemoteClient extends IClient {
 	public ArrayList<Integer> getActivities(INotifiableManager manager);
 	
 	
-//	public  ArrayList<Album> getPlugins (INotifiableManager manager);
+	public  Boolean executeAddon (INotifiableManager manager,String addonId);
 	public  ArrayList<Addon> getPlugins (INotifiableManager manager);
 
 }
