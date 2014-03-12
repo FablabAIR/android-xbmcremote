@@ -25,6 +25,7 @@ import org.xbmc.api.business.IControlManager;
 import org.xbmc.api.business.IEventClientManager;
 import org.xbmc.api.business.IInfoManager;
 import org.xbmc.api.business.IMusicManager;
+import org.xbmc.api.business.IReflexiveRemoteManager;
 import org.xbmc.api.business.ITvShowManager;
 import org.xbmc.api.business.IVideoManager;
 import org.xbmc.api.presentation.INotifiableController;
@@ -54,5 +55,9 @@ public abstract class ManagerFactory {
 		}
 		sEventClientManager.setController(controller);
 		return sEventClientManager;
+	}
+	
+	public static IReflexiveRemoteManager getReflexiveRemoteManager(INotifiableController controller){
+		return ManagerThread.reflexive(controller);
 	}
 }

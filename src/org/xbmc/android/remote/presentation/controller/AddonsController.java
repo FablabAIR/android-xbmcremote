@@ -1,7 +1,9 @@
 package org.xbmc.android.remote.presentation.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.xbmc.android.remote.R;
 import org.xbmc.android.remote.business.ManagerFactory;
@@ -12,7 +14,10 @@ import org.xbmc.android.remote.presentation.widget.OneLabelItemView;
 import org.xbmc.api.business.DataResponse;
 import org.xbmc.api.business.IControlManager;
 import org.xbmc.api.business.IInfoManager;
+import org.xbmc.api.business.IReflexiveRemoteManager;
+import org.xbmc.api.data.IReflexiveRemoteClient;
 import org.xbmc.api.info.FileTypes;
+import org.xbmc.api.object.Addon;
 import org.xbmc.api.object.Album;
 import org.xbmc.api.object.FileLocation;
 import org.xbmc.api.type.MediaType;
@@ -36,13 +41,14 @@ import android.widget.AdapterView.OnItemClickListener;
 @SuppressWarnings("serial")
 public class AddonsController extends ListController implements IController {
 
-	private IInfoManager mInfoManager;
-	private HashMap<String, String> mFileItems;
+	private IReflexiveRemoteManager mReflexiveManager;
+	private HashMap<String, Addon> mFileItems;
 	protected ListAdapter mAdapter;
 	private Album album;
+	private ArrayList<Addon> listAddon = new ArrayList<Addon>(Arrays.asList(new Addon("name","int")));
 	
 	public void onCreate(Activity activity, Handler handler, AbsListView list) {
-		mInfoManager = ManagerFactory.getInfoManager(this);
+		mReflexiveManager = ManagerFactory.getReflexiveRemoteManager(this);
 		if (!isCreated()) {
 			super.onCreate(activity, handler, list);
 			fillUp();
@@ -52,16 +58,16 @@ public class AddonsController extends ListController implements IController {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					if (mFileItems == null)
 						return;
-					//String item = mFileItems.get(((String)parent.getAdapter().getItem(position)));
+					//setListAdapter(new FileItemAdapter(mActivity, listAddon));
 					mActivity.startActivity(new Intent(mActivity, RemoteActivity.class));
 				}
 			});
 		}
 	}
 	
-	private class FileItemAdapter extends ArrayAdapter<String> {
+	private class FileItemAdapter extends ArrayAdapter<Addon> {
 		
-		FileItemAdapter(Activity activity, ArrayList<String> items) {
+		FileItemAdapter(Activity activity, ArrayList<Addon> items) {
 			super(activity, 0, items);
 		}
 		
@@ -75,7 +81,7 @@ public class AddonsController extends ListController implements IController {
 			}
 			view.reset();
 			view.position = position;
-			view.title = this.getItem(position);
+			view.title = this.getItem(position).name;
 			final Resources res = mActivity.getResources();
 			view.setCover(BitmapFactory.decodeResource(res, R.drawable.icon_play));
 			return view;
@@ -88,12 +94,12 @@ public class AddonsController extends ListController implements IController {
 		mList.setTextFilterEnabled(false);
 		setTitle("Addons");
 		showOnLoading();
-		DataResponse<ArrayList<String>> mediaListHandler = new DataResponse<ArrayList<String>>() {
+		DataResponse<ArrayList<Addon>> mediaListHandler = new DataResponse<ArrayList<Addon>>() {
 			public void run() {
 				if (value.size() > 0) {
-					mFileItems = new HashMap<String, String>();
-					for (String item : value) {
-						mFileItems.put(item, item);
+					mFileItems = new HashMap<String, Addon>();
+					for (Addon item : value) {
+						mFileItems.put(item.name, item);
 					}
 					setListAdapter(new FileItemAdapter(mActivity, value));
 				} else {
@@ -101,7 +107,7 @@ public class AddonsController extends ListController implements IController {
 				}
 			}
 		};
-		mInfoManager.getSharesString(mediaListHandler, mActivity);
+		mReflexiveManager.getPlugins(mediaListHandler, mActivity.getApplicationContext());
 	}
 	
 	public void setListAdapter(ListAdapter adapter) {

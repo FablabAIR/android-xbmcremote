@@ -297,7 +297,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 		case 10:
 			if (prefs.getBoolean("setting_show_home_addon", true)){
 				homeItems.add(new HomeItem(HOME_ACTION_ADDON, R.drawable.icon_home_addon, "Addons", "Browse your"));
-				PreferenceManager.setDefaultValues(mActivity, "setting_show_home_addon", menu, R.xml.preferences, true);
+				PreferenceManager.setDefaultValues(mActivity.getApplicationContext(), "setting_show_home_addon", menu, R.xml.preferences, true);
 			}
 			break;
 		default:
@@ -381,8 +381,6 @@ public class HomeController extends AbstractController implements INotifiableCon
 					case HOME_ACTION_ADDON:
 						intent = new Intent(v.getContext(), AddonsActivity.class);
 						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonsController());
-						intent.putExtra(ListController.EXTRA_SHARE_TYPE, MediaType.PICTURES);
-						intent.putExtra(ListController.EXTRA_PATH, "");
 						break;
 				}
 				if (intent != null) {
