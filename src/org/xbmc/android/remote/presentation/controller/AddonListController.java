@@ -80,6 +80,7 @@ public class AddonListController extends ListController implements IController {
 
 					Intent intent = new Intent(mActivity, ListActivity.class);
 					intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
+					intent.putExtra("first", 0);
 					mActivity.startActivity(intent);
 				
 				}

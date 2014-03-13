@@ -46,17 +46,18 @@ public class AddonController extends ListController implements IController {
 	private IReflexiveRemoteManager mReflexiveManager;
 	private HashMap<String, ListItemType> mFileItems;
 	protected ListAdapter mAdapter;
-	private boolean inAddon;
 
 	public void onCreate(Activity activity, Handler handler, AbsListView list) {
 		mReflexiveManager = ManagerFactory.getReflexiveRemoteManager(this);
 		if (!isCreated()) {
 			super.onCreate(activity, handler, list);
 			
-			inAddon = mActivity.getIntent().getExtras().getBoolean("inAddon");
-			System.out.println(inAddon);
-			
-			fillUp(inAddon);
+			if((mActivity.getIntent().getIntExtra("first", -1)==0)){
+				fillUpAddon();
+			}
+			else{
+				fillUpItem();
+			}
 
 			activity.registerForContextMenu(mList);
 			mList.setOnItemClickListener(new OnItemClickListener() {
@@ -75,19 +76,11 @@ public class AddonController extends ListController implements IController {
                         }
                     };
                     
-                    //System.out.println(((Addon) mList.getItemAtPosition(position)).name);
-                    //mReflexiveManager.executePlugins(response, mActivity,((Addon) mList.getItemAtPosition(position)).name);
-                    
-                    
-					if(!fillUp(inAddon)){
-						Intent intent = new Intent(mActivity, ListActivity.class);
-						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
-						intent.putExtra("inAddon", true);
-						mActivity.startActivity(intent);
-					}
-					else{
-						mActivity.startActivity(new Intent(mActivity, RemoteActivity.class));
-					}
+					Intent intent = new Intent(mActivity, ListActivity.class);
+					intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
+					intent.putExtra("first", 1);
+					mActivity.startActivity(intent);
+					
 				}
 			});
 		}
@@ -117,9 +110,9 @@ public class AddonController extends ListController implements IController {
 			return view;
 		}
 	}
-
-	private boolean fillUp(boolean inAddon) {
-
+	
+	private void fillUpAddon() {
+		
 		mFileItems = null;
 		mList.setTextFilterEnabled(false);
 		setTitle("Addons");
@@ -138,12 +131,30 @@ public class AddonController extends ListController implements IController {
 			}
 		};
 		//methode pour recuperer liste
-		if(inAddon)
-			mReflexiveManager.setSelectedItem(mediaListHandler,mActivity.getApplicationContext());
-		else
-			mReflexiveManager.GetCurrentListDisplayed(mediaListHandler,mActivity.getApplicationContext());
-		
-		return mediaListHandler.value.isEmpty();
+		mReflexiveManager.GetCurrentListDisplayed(mediaListHandler,mActivity.getApplicationContext());
+	}
+
+	private void fillUpItem() {
+		mFileItems = null;
+		mList.setTextFilterEnabled(false);
+		setTitle("Addons");
+		showOnLoading();
+		DataResponse<ArrayList<ListItemType>> mediaListHandler = new DataResponse<ArrayList<ListItemType>>() {
+			public void run() {
+				if (value.size() > 0) {
+					mFileItems = new HashMap<String, ListItemType>();
+					for (ListItemType item : value) {
+						mFileItems.put(item.getName(), item);
+					}
+					setListAdapter(new FileItemAdapter(mActivity, value));
+				} else {
+					//setNoDataMessage("No files found.", R.drawable.icon_folder_dark);
+					mActivity.startActivity(new Intent(mActivity, RemoteActivity.class));
+					mActivity.finish();
+				}
+			}
+		};
+		mReflexiveManager.setSelectedItem(mediaListHandler,mActivity.getApplicationContext());
 	}
 
 	public void setListAdapter(ListAdapter adapter) {
