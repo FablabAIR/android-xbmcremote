@@ -52,7 +52,6 @@ public class AddonListController extends ListController implements IController {
 	protected ListAdapter mAdapter;
 	public static final int ITEM_CONTEXT_INFO = 1;
 	private ArrayList<Addon> listAddon = new ArrayList<Addon>(Arrays.asList(new Addon("name","int")));
-	public static final List listUpdate = new ArrayList<String>();
 	
 	public void onCreate(Activity activity, Handler handler, AbsListView list) {
 		mReflexiveManager = ManagerFactory.getReflexiveRemoteManager(this);
@@ -76,18 +75,13 @@ public class AddonListController extends ListController implements IController {
                         }
                     };
                     
-                    System.out.println(((Addon) mList.getItemAtPosition(position)).name);
+                    System.out.println("SOUT "+((Addon) mList.getItemAtPosition(position)).name);
                     mReflexiveManager.executePlugins(response, mActivity,((Addon) mList.getItemAtPosition(position)).name);
-                    //methode pour recuperer liste
-					
-					if(!listUpdate.isEmpty()){
-						Intent intent = new Intent(mActivity, ListActivity.class);
-						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
-						mActivity.startActivity(intent);
-					}
-					else{
-						mActivity.startActivity(new Intent(mActivity, RemoteActivity.class));
-					}
+
+					Intent intent = new Intent(mActivity, ListActivity.class);
+					intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
+					mActivity.startActivity(intent);
+				
 				}
 			});
 		}
