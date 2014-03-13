@@ -45,7 +45,7 @@ public class AddonController extends ListController implements IController {
 	private IReflexiveRemoteManager mReflexiveManager;
 	private HashMap<String, Addon> mFileItems;
 	protected ListAdapter mAdapter;
-	
+	private boolean listUpdate;
 
 	public void onCreate(Activity activity, Handler handler, AbsListView list) {
 		mReflexiveManager = ManagerFactory.getReflexiveRemoteManager(this);
@@ -59,12 +59,27 @@ public class AddonController extends ListController implements IController {
 						int position, long id) {
 					if (mFileItems == null)
 						return;
-					// setListAdapter(new FileItemAdapter(mActivity,
-					// listAddon));
-					Intent intent = new Intent(mActivity, AddonsActivity.class);
-					intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
 					
-					mActivity.startActivity(intent);
+					if(listUpdate){
+						Intent intent = new Intent(mActivity, ListActivity.class);
+						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
+						mActivity.startActivity(intent);
+					}
+					else{
+						DataResponse<Boolean> response = new DataResponse<Boolean>() {
+	                        public void run() {
+	                            if (value) {
+	                                System.err.println("Execution Plugin OK");
+	                            } else {
+	                                System.out.println("Execution Plugin Failed");
+	                            }
+	                        }
+	                    };
+	                    
+	                    System.out.println(((Addon) mList.getItemAtPosition(position)).name);
+	                    mReflexiveManager.executePlugins(response, mActivity,((Addon) mList.getItemAtPosition(position)).name);
+	                    mActivity.startActivity(new Intent(mActivity, RemoteActivity.class));
+					}
 				}
 			});
 		}
