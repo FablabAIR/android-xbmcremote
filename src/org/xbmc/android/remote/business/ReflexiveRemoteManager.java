@@ -9,6 +9,7 @@ import org.xbmc.api.business.IReflexiveRemoteManager;
 import org.xbmc.api.business.ISortableManager;
 import org.xbmc.api.data.IControlClient;
 import org.xbmc.api.data.IMusicClient;
+import org.xbmc.api.type.ListItemType;
 import org.xbmc.api.type.SortType;
 import org.xbmc.api.object.Addon;
 import org.xbmc.api.object.Album;
@@ -54,6 +55,30 @@ public class ReflexiveRemoteManager extends AbstractManager implements IReflexiv
 			@Override
 			public void doRun() throws Exception { 
 				response.value = refelexiveRemote(context).executeAddon(ReflexiveRemoteManager.this,addonid);
+			}
+		});
+		
+	}
+
+
+	@Override
+	public void GetCurrentListDisplayed(final DataResponse<ArrayList<ListItemType>> response,final Context context) {
+		mHandler.post(new Command<ArrayList<ListItemType>>(response, this) {
+			@Override
+			public void doRun() throws Exception { 
+				response.value = refelexiveRemote(context).getCurrentListDisplayed(ReflexiveRemoteManager.this);
+			}
+		});
+		
+	}
+
+
+	@Override
+	public void setSelectedItem(final DataResponse<ArrayList<ListItemType>> response,final Context context) {
+		mHandler.post(new Command<ArrayList<ListItemType>>(response, this) {
+			@Override
+			public void doRun() throws Exception { 
+				response.value = refelexiveRemote(context).setSelectedItem(ReflexiveRemoteManager.this);
 			}
 		});
 		

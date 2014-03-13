@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.xbmc.api.business.INotifiableManager;
 import org.xbmc.api.object.Addon;
-import org.xbmc.api.object.Album;
+import org.xbmc.api.type.ListItemType;
 
 public interface IReflexiveRemoteClient extends IClient {
 
@@ -15,8 +15,8 @@ public interface IReflexiveRemoteClient extends IClient {
 	 * @return All activity
 	 */
 	public ArrayList<Integer> getActivities(INotifiableManager manager);
-	
 	public  Boolean executeAddon (INotifiableManager manager,String addonId);
 	public  ArrayList<Addon> getPlugins (INotifiableManager manager);
-
+	public  ArrayList<ListItemType> getCurrentListDisplayed(INotifiableManager manager);
+	public  ArrayList<ListItemType> setSelectedItem(INotifiableManager manager);
 }

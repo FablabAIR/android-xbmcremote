@@ -10,6 +10,7 @@ import org.xbmc.api.object.Album;
 import org.xbmc.api.object.Host;
 import org.xbmc.jsonrpc.Connection;
 import org.xbmc.api.object.Addon;
+import org.xbmc.api.type.ListItemType;
 
 public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteClient {
 
@@ -51,5 +52,25 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	@Override
 	public Boolean executeAddon(INotifiableManager manager, String addonId) {
 		return mConnection.getString(manager, "Addons.ExecuteAddon", obj().p("addonid",addonId)).equals("OK");
+	}
+
+	@Override
+	public ArrayList<ListItemType> getCurrentListDisplayed(INotifiableManager manager) {
+		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
+		listItemsDisplayed.add(new ListItemType("Test1",12001));
+		listItemsDisplayed.add(new ListItemType("Test2",12002));
+		listItemsDisplayed.add(new ListItemType("Test3",12003));
+		return listItemsDisplayed;
+	}
+	
+	@Override
+	public ArrayList<ListItemType> setSelectedItem(INotifiableManager manager){
+		//Send a request to setSelectedItem XBMC 
+		
+		//Request the new list 
+		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
+		
+		
+		return listItemsDisplayed ; 
 	}
 }
