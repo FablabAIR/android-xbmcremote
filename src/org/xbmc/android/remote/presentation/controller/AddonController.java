@@ -178,5 +178,15 @@ public class AddonController extends ListController implements IController {
 		// TODO Auto-generated method stub
 
 	}
+	
+	public void onActivityPause() {
+		mReflexiveManager.setController(null);
+		super.onActivityPause();
+	}
+
+	public void onActivityResume(Activity activity) {
+		super.onActivityResume(activity);
+		mReflexiveManager.setController(this);
+	}
 
 }

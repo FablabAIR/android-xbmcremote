@@ -53,6 +53,7 @@ import org.xbmc.api.business.DataResponse;
 import org.xbmc.api.business.IInfoManager;
 import org.xbmc.api.business.IMusicManager;
 import org.xbmc.api.business.INotifiableManager;
+import org.xbmc.api.business.IReflexiveRemoteManager;
 import org.xbmc.api.business.ITvShowManager;
 import org.xbmc.api.business.IVideoManager;
 import org.xbmc.api.info.SystemInfo;
@@ -116,6 +117,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 	private static List<Integer> listMenu;
 	
 	private IInfoManager mInfoManager;
+	private IReflexiveRemoteManager mReflexiveManager;
 	
 	private static final String TAG = "HomeController";
 	private static final boolean DEBUG = false;
@@ -137,7 +139,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 		super.onCreate(activity, handler);
 		mInfoManager = ManagerFactory.getInfoManager(this);
 		mMenuGrid = menuGrid;
-		listMenu = new ArrayList<Integer>(Arrays.asList(1,3,4,5,9,10));
+		listMenu = new ArrayList<Integer>(Arrays.asList(1,2));
 		setupMenuItems(menuGrid);
 		
 	}
@@ -229,11 +231,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 
 		final ArrayList<HomeItem> homeItems = new ArrayList<HomeItem>();
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
-		
-		for (Integer menu : listMenu) {
-			setMenu(homeItems, prefs, menu);
-		}
-		
+
 		//créer une icone dans le menu home
 		
 
@@ -247,12 +245,32 @@ public class HomeController extends AbstractController implements INotifiableCon
 		
 //		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
 //		final String wolMac = prefs.getString("setting_wol", "");
-		if (HostFactory.host != null && !"".equals(HostFactory.host.mac_addr))
+		if (HostFactory.host != null && !"".equals(HostFactory.host.mac_addr)){
 			offlineItems.add(mHomeWol);
+		}
 		
 		mHomeMenu = new HomeAdapter(mActivity, homeItems);
 		mOfflineMenu = new HomeAdapter(mActivity, offlineItems);
 		
+//		mReflexiveManager = ManagerFactory.getReflexiveRemoteManager(this);
+//		DataResponse<ArrayList<Integer>> reponse = new DataResponse<ArrayList<Integer>>() {
+//			public void run() {
+//				if(value.size()>0){
+//					System.out.println("Success");
+//					//listMenu.addAll(value) ;
+//					//listMenu = new ArrayList<Integer>(Arrays.asList(3,4));
+//				}
+//				else{
+//					System.out.println("Failed");
+//					listMenu = new ArrayList<Integer>(Arrays.asList(0,1));
+//				}
+//			}
+//		};
+//		mReflexiveManager.getActivities(reponse, mActivity.getApplication());
+		//listMenu.addAll(reponse.value) ;
+		for (Integer menu : listMenu) {
+			setMenu(homeItems, prefs, menu);
+		}
 		setHomeAdapter(menuGrid, mOfflineMenu);
 	}
 	
@@ -311,8 +329,10 @@ public class HomeController extends AbstractController implements INotifiableCon
 	 */
 	private void resetupOfflineMenuItems() {
 		mOfflineMenu.remove(mHomeWol);
-		if (HostFactory.host != null && !"".equals(HostFactory.host.mac_addr))
+		if (HostFactory.host != null && !"".equals(HostFactory.host.mac_addr)){
 			mOfflineMenu.add(mHomeWol);
+		}
+			
 	}
 	
 	private void setHomeAdapter(GridView menuGrid, HomeAdapter adapter) {
