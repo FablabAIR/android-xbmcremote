@@ -27,8 +27,11 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	public ArrayList<Integer> getActivities(INotifiableManager manager) {
 		 ArrayList<Integer> activities = new ArrayList<Integer>();
 		 activities.add(1);
-		 activities.add(2);
 		 activities.add(3);
+		 activities.add(4);
+		 activities.add(5);
+		 activities.add(9);
+		 activities.add(10);
 		return activities;
 	}
 	
