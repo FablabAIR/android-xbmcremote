@@ -77,12 +77,25 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	
 	@Override
 	public ArrayList<ListItemType> setSelectedItem(INotifiableManager manager){
-		//Send a request to setSelectedItem XBMC 
-		
-		//Request the new list 
+		mConnection.getString(manager, "Input.Select", null).equals("OK");
+		long start=System.nanoTime();
+		while((System.nanoTime()-start)<600000000);
 		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
-		
-		
-		return listItemsDisplayed ; 
+		final JsonNode result = mConnection.getJson(manager, "GUI.GetCurrentListDisplayed", obj());
+		System.err.println(result.size());
+		int id = 0 ; 
+		if(result!= null){
+			for (Iterator<JsonNode> i = result.getElements(); i.hasNext();) {
+				JsonNode jsonItem = (JsonNode)i.next();
+				listItemsDisplayed.add(new ListItemType(getString(jsonItem,"itemId"),id));
+				id++;
+			}
+		}
+//		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
+//		listItemsDisplayed.add(new ListItemType("Test1",12001));
+//		listItemsDisplayed.add(new ListItemType("Test2",12002));
+//		listItemsDisplayed.add(new ListItemType("Test3",12003));
+		return listItemsDisplayed;
+
 	}
 }

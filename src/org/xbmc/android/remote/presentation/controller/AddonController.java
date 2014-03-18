@@ -80,6 +80,7 @@ public class AddonController extends ListController implements IController {
 					intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
 					intent.putExtra("first", 1);
 					mActivity.startActivity(intent);
+					mActivity.finish();
 					
 				}
 			});
@@ -147,6 +148,7 @@ public class AddonController extends ListController implements IController {
 						mFileItems.put(item.getName(), item);
 					}
 					setListAdapter(new FileItemAdapter(mActivity, value));
+					//mActivity.finish();
 				} else {
 					//setNoDataMessage("No files found.", R.drawable.icon_folder_dark);
 					mActivity.startActivity(new Intent(mActivity, RemoteActivity.class));
