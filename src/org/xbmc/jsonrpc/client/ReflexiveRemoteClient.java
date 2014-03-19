@@ -25,6 +25,8 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 
 	@Override
 	public ArrayList<Integer> getActivities(INotifiableManager manager) {
+		mConnection.getString(manager, "Input.Select", null).equals("OK");
+
 		 ArrayList<Integer> activities = new ArrayList<Integer>();
 		 activities.add(1);
 		 activities.add(3);

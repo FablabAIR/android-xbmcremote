@@ -34,6 +34,8 @@ import org.xbmc.api.business.IEventClientManager;
 import org.xbmc.api.type.ThumbSize;
 import org.xbmc.eventclient.ButtonCodes;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -60,6 +62,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
+@SuppressLint("NewApi")
 public class HomeActivity extends Activity {
 	
 	private static final String TAG = "HomeActivity";
@@ -82,10 +85,10 @@ public class HomeActivity extends Activity {
 	private HomeController mHomeController;
 	
 	private IEventClientManager mEventClientManager;
-
+	private AndroidBroadcastReceiver receiver;
 	private ProgressThread mProgressThread;
     private ProgressDialog mProgressDialog;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -121,10 +124,15 @@ public class HomeActivity extends Activity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
-
-        registerReceiver(new AndroidBroadcastReceiver(), filter);
+        receiver = new AndroidBroadcastReceiver();
+        registerReceiver(receiver, filter);
 	}
 	
+	@Override
+	protected void onStop() {
+	    super.onStop();
+	    unregisterReceiver(receiver);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
