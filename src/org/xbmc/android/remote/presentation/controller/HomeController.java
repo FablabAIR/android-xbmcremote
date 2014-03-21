@@ -228,24 +228,25 @@ public class HomeController extends AbstractController implements INotifiableCon
 	}
 	
 	private void setupMenuItems(GridView menuGrid) {
-		final HomeItem remote = new HomeItem(HOME_ACTION_REMOTE, R.drawable.icon_home_remote, "Remote Control", "Use as");
-
 		final ArrayList<HomeItem> homeItems = new ArrayList<HomeItem>();
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
 
 		
-		//cr�er une icone dans le menu home
-		DataResponse<ArrayList<Integer>> response = new DataResponse<ArrayList<Integer>>() {
+		DataResponse<ArrayList<Integer>> responseMenuItem = new DataResponse<ArrayList<Integer>>() {
 			public void run() {
+				//Add dynamic menuItem
 				for (Integer menu : value) {
 					setMenu(homeItems, prefs, menu);
 				}
 			}
 		};
-		IReflexiveRemoteManager rM = ManagerFactory.getReflexiveRemoteManager(this);
-		rM.getActivities(response, mActivity.getApplicationContext());
+		IReflexiveRemoteManager mReflexiveRemote = ManagerFactory.getReflexiveRemoteManager(this);
+		mReflexiveRemote.getActivities(responseMenuItem, mActivity.getApplicationContext());
 
 		prefs.registerOnSharedPreferenceChangeListener(this);
+		
+		final HomeItem remote = new HomeItem(HOME_ACTION_REMOTE, R.drawable.icon_home_remote, "Remote Control", "Use as");
+		
 		homeItems.add(new HomeItem(HOME_ACTION_NOWPLAYING, R.drawable.icon_home_playing, "Now Playing", "See what's"));
 		homeItems.add(remote);
 		
@@ -384,7 +385,6 @@ public class HomeController extends AbstractController implements INotifiableCon
 						PowerDown powerdown = new PowerDown();
 						powerdown.ShowDialog(mActivity);
 						break;
-					// se d�placer dans une autres activit�s
 					case HOME_ACTION_NFC:
 						intent = new Intent(v.getContext(), NFCWriterActivity.class);
 						break;

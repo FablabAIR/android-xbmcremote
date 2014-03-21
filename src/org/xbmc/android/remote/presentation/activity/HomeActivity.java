@@ -128,11 +128,6 @@ public class HomeActivity extends Activity {
         registerReceiver(receiver, filter);
 	}
 	
-	@Override
-	protected void onStop() {
-	    super.onStop();
-	    unregisterReceiver(receiver);
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
