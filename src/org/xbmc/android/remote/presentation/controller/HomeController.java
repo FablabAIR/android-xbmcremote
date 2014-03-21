@@ -115,6 +115,8 @@ public class HomeController extends AbstractController implements INotifiableCon
 	private static final int HOME_ACTION_POWERDOWN = 8;
 	private static final int HOME_ACTION_NFC = 9;
 	private static final int HOME_ACTION_ADDON = 10;
+	private static final int HOME_ACTION_WEATHER = 11;
+	private static final int HOME_ACTION_PVR = 12;
 	
 	private static List<Integer> listMenu;
 	
@@ -311,6 +313,18 @@ public class HomeController extends AbstractController implements INotifiableCon
 				PreferenceManager.setDefaultValues(mActivity.getApplicationContext(), "setting_show_home_addon", menu, R.xml.preferences, true);
 			}
 			break;
+		case 11:
+			if (prefs.getBoolean("setting_show_home_weather", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_WEATHER, R.drawable.icon_home_addon, "Weather", "Diplay the"));
+				PreferenceManager.setDefaultValues(mActivity.getApplicationContext(), "setting_show_home_weather", menu, R.xml.preferences, true);
+			}
+			break;
+		case 12:
+			if (prefs.getBoolean("setting_show_home_pvr", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_PVR, R.drawable.icon_home_addon, "PVR", "Watch"));
+				PreferenceManager.setDefaultValues(mActivity.getApplicationContext(), "setting_show_home_pvr", menu, R.xml.preferences, true);
+			}
+			break;
 		default:
 			break;
 		}
@@ -391,6 +405,12 @@ public class HomeController extends AbstractController implements INotifiableCon
 					case HOME_ACTION_ADDON:
 						intent = new Intent(v.getContext(),ListActivity.class);
 						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonListController());
+						break;
+					case HOME_ACTION_WEATHER:
+						intent = new Intent(v.getContext(),RemoteActivity.class);
+						break;
+					case HOME_ACTION_PVR:
+						intent = new Intent(v.getContext(),RemoteActivity.class);
 						break;
 				}
 				if (intent != null) {

@@ -54,6 +54,8 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 		listMainItems.add("TVShow");
 		listMainItems.add("Music");
 		listMainItems.add("Programs");
+		listMainItems.add("Weather");
+		listMainItems.add("PVR");
 
 		
 		 ArrayList<Integer> mainMenu = new ArrayList<Integer>();

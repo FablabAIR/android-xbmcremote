@@ -83,6 +83,16 @@
 			android:title="Show Addons"
 			android:summary="Display the Addons Button"
 			android:enabled="true" android:defaultValue="false" />
+		<CheckBoxPreference
+			android:key="setting_show_home_weather"
+			android:title="Show Weather"
+			android:summary="Display the Weather Button"
+			android:enabled="true" android:defaultValue="false" />
+		<CheckBoxPreference
+			android:key="setting_show_home_pvr"
+			android:title="Show PVR"
+			android:summary="Display the PVR Button"
+			android:enabled="true" android:defaultValue="false" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Screen Behaviour">
 		<ListPreference
