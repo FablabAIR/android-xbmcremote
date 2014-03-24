@@ -121,7 +121,7 @@ public class AddonController extends ListController implements IController {
 		showOnLoading();
 		DataResponse<ArrayList<ListItemType>> mediaListHandler = new DataResponse<ArrayList<ListItemType>>() {
 			public void run() {
-				if (value.size() > 0) {
+				if (value.size() > 1) {
 					mFileItems = new HashMap<String, ListItemType>();
 					for (ListItemType item : value) {
 						mFileItems.put(item.getName(), item);
@@ -144,9 +144,10 @@ public class AddonController extends ListController implements IController {
 		showOnLoading();
 		DataResponse<ArrayList<ListItemType>> mediaListHandler = new DataResponse<ArrayList<ListItemType>>() {
 			public void run() {
-				if (value.size() > 0) {
+				if (value.size() > 1) {
 					mFileItems = new HashMap<String, ListItemType>();
 					for (ListItemType item : value) {
+						System.err.println(item.getName());
 						mFileItems.put(item.getName(), item);
 					}
 					setListAdapter(new FileItemAdapter(mActivity, value));

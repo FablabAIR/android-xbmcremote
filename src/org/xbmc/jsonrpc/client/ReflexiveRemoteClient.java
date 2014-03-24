@@ -2,6 +2,7 @@ package org.xbmc.jsonrpc.client;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.codehaus.jackson.JsonNode;
 import org.w3c.dom.ls.LSInput;
@@ -64,7 +65,6 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	}
 	
 	private Integer getMenuInt(String menuItem) {
-		System.err.println(menuItem);
 		if(menuItem.equals("Movie")|menuItem.equals("Videos")){
 			return HOME_ACTION_VIDEOS;
 		}else if(menuItem.equals("TVShow")){
@@ -97,7 +97,10 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 		if(jsonAddons != null){
 			for (Iterator<JsonNode> i = jsonAddons.getElements(); i.hasNext();) {
 				JsonNode jsonAddon = (JsonNode)i.next();
-				addons.add(new Addon(getString(jsonAddon, "addonid"), getString(jsonAddon, "type")));
+				if(getString(jsonAddon, "addonid").contains("script") || getString(jsonAddon, "addonid").contains("plugin"))
+				{
+					addons.add(new Addon(getString(jsonAddon, "addonid"), getString(jsonAddon, "type")));
+				}
 			}
 		}
 		return addons;
@@ -110,23 +113,29 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 
 	@Override
 	public ArrayList<ListItemType> getCurrentListDisplayed(INotifiableManager manager) {
-		//Wait Start plugin
+		//Wait Update Display
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
 		final JsonNode result = mConnection.getJson(manager, "GUI.GetCurrentListDisplayed", obj());
-		System.err.println(result.size());
 		int id = 0 ; 
+		LinkedList<ListItemType> listItemsDisplayedC = new LinkedList<ListItemType>();
+		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
 		if(result!= null){
 			for (Iterator<JsonNode> i = result.getElements(); i.hasNext();) {
 				JsonNode jsonItem = (JsonNode)i.next();
-				listItemsDisplayed.add(new ListItemType(getString(jsonItem,"itemId"),id));
+				if(getString(jsonItem,"itemId").equals("..")){
+					listItemsDisplayedC.addFirst(new ListItemType(getString(jsonItem,"itemId"),id));
+					
+				}else{
+					listItemsDisplayedC.add(new ListItemType(getString(jsonItem,"itemId"),id));
+				}
 				id++;
 			}
 		}
+		listItemsDisplayed.addAll(listItemsDisplayedC);
 		return listItemsDisplayed;
 	}
 	
@@ -134,18 +143,29 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	public ArrayList<ListItemType> setSelectedItem(INotifiableManager manager,String selectedItem){
 
 		mConnection.getString(manager, "GUI.NavigateInListItem", obj().p("SelectedItem",selectedItem));
-
+		//Wait Update Display
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		LinkedList<ListItemType> listItemsDisplayedC = new LinkedList<ListItemType>();
 		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
 		final JsonNode result = mConnection.getJson(manager, "GUI.GetCurrentListDisplayed", obj());
-		System.err.println(result.size());
 		int id = 0 ; 
 		if(result!= null){
 			for (Iterator<JsonNode> i = result.getElements(); i.hasNext();) {
 				JsonNode jsonItem = (JsonNode)i.next();
-				listItemsDisplayed.add(new ListItemType(getString(jsonItem,"itemId"),id));
+				if(getString(jsonItem,"itemId").equals("..")){
+					listItemsDisplayedC.addFirst(new ListItemType(getString(jsonItem,"itemId"),id));
+					
+				}else{
+					listItemsDisplayedC.add(new ListItemType(getString(jsonItem,"itemId"),id));
+				}
 				id++;
 			}
 		}
+		listItemsDisplayed.addAll(listItemsDisplayedC);
 		return listItemsDisplayed;
 
 	}
