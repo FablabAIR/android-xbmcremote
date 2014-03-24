@@ -28,6 +28,7 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	private static final int HOME_ACTION_ADDON = 10;
 	private static final int HOME_ACTION_WEATHER = 11;
 	private static final int HOME_ACTION_PVR = 12;
+	private static final int HOME_ACTION_DISK = 13 ; 
 	
 	public ReflexiveRemoteClient(Connection connection) {
 		super(connection);
@@ -41,21 +42,13 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	@Override
 	public ArrayList<Integer> getActivities(INotifiableManager manager) {
 		ArrayList<String> listMainItems = new ArrayList<String>();
-//		final JsonNode result = mConnection.getJson(manager, "GUI.GetCurrentMainMenu", obj());
-//		System.err.println(result.size());
-//		if(result!= null){
-//			for (Iterator<JsonNode> i = result.getElements(); i.hasNext();) {
-//				JsonNode jsonItem = (JsonNode)i.next();
-//				listMainItems.add(getString(jsonItem,"itemId"));
-//			}
-//		}
-		
-		listMainItems.add("Movies");
-		listMainItems.add("TVShow");
-		listMainItems.add("Music");
-		listMainItems.add("Programs");
-		listMainItems.add("Weather");
-		listMainItems.add("PVR");
+		final JsonNode result = mConnection.getJson(manager, "GUI.GetCurrentMainMenu", obj());
+		if(result!= null){
+			for (Iterator<JsonNode> i = result.getElements(); i.hasNext();) {
+				JsonNode jsonItem = (JsonNode)i.next();
+				listMainItems.add(getString(jsonItem,"menuId"));
+			}
+		}
 
 		
 		 ArrayList<Integer> mainMenu = new ArrayList<Integer>();
@@ -71,13 +64,14 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	}
 	
 	private Integer getMenuInt(String menuItem) {
-		if(menuItem.equals("Movies")){
+		System.err.println(menuItem);
+		if(menuItem.equals("Movie")|menuItem.equals("Videos")){
 			return HOME_ACTION_VIDEOS;
 		}else if(menuItem.equals("TVShow")){
 			return HOME_ACTION_TVSHOWS;
 		}else if(menuItem.equals("Music")){
 			return HOME_ACTION_MUSIC;
-		}else if(menuItem.equals("Picture")){
+		}else if(menuItem.equals("Pictures")){
 			return HOME_ACTION_PICTURES;
 		}else if(menuItem.equals("Programs")){
 			return HOME_ACTION_ADDON;
@@ -85,10 +79,13 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 			return HOME_ACTION_WEATHER;
 		}else if(menuItem.equals("PVR")){
 			return HOME_ACTION_PVR;
+		}else if(menuItem.equals("Disk")){
+			return HOME_ACTION_DISK;					
 		}else{
 			return -1;
 		}
 
+		//TODO : Video
 	}
 
 	@Override
@@ -134,10 +131,10 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	}
 	
 	@Override
-	public ArrayList<ListItemType> setSelectedItem(INotifiableManager manager){
-		mConnection.getString(manager, "Input.Select", null).equals("OK");
-		long start=System.nanoTime();
-		while((System.nanoTime()-start)<600000000);
+	public ArrayList<ListItemType> setSelectedItem(INotifiableManager manager,String selectedItem){
+		mConnection.getString(manager, "GUI.NavigateInListItem", obj().p("SelectedItem",selectedItem));
+	//	mConnection.getString(manager, "GUI.NavigateInListItem", null).equals("OK");
+
 		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
 		final JsonNode result = mConnection.getJson(manager, "GUI.GetCurrentListDisplayed", obj());
 		System.err.println(result.size());

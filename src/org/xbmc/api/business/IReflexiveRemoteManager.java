@@ -30,6 +30,6 @@ public interface IReflexiveRemoteManager extends IManager {
 	
 	public void GetCurrentListDisplayed(final DataResponse<ArrayList<ListItemType>> response, final Context context);
 	
-	public void setSelectedItem(final DataResponse<ArrayList<ListItemType>> response, final Context context);
+	public void setSelectedItem(final DataResponse<ArrayList<ListItemType>> response, final Context context, final String selectedItem);
 
 }

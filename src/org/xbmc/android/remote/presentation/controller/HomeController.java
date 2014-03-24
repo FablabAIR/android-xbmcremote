@@ -117,6 +117,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 	private static final int HOME_ACTION_ADDON = 10;
 	private static final int HOME_ACTION_WEATHER = 11;
 	private static final int HOME_ACTION_PVR = 12;
+	private static final int HOME_ACTION_DISK = 13 ; 
 	
 	private static List<Integer> listMenu;
 	

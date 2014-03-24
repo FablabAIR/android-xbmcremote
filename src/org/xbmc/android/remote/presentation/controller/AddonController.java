@@ -156,7 +156,7 @@ public class AddonController extends ListController implements IController {
 				}
 			}
 		};
-		mReflexiveManager.setSelectedItem(mediaListHandler,mActivity.getApplicationContext());
+		mReflexiveManager.setSelectedItem(mediaListHandler,mActivity.getApplicationContext(),mList.getSelectedItem().toString());
 	}
 
 	public void setListAdapter(ListAdapter adapter) {
