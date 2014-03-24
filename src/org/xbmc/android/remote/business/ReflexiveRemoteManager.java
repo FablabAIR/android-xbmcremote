@@ -74,11 +74,23 @@ public class ReflexiveRemoteManager extends AbstractManager implements IReflexiv
 
 
 	@Override
-	public void setSelectedItem(final DataResponse<ArrayList<ListItemType>> response,final Context context,final String selectedItem) {
+	public void setSelectedItem(final DataResponse<ArrayList<ListItemType>> response,final Context context,final String itemSelected) {
 		mHandler.post(new Command<ArrayList<ListItemType>>(response, this) {
 			@Override
 			public void doRun() throws Exception { 
-				response.value = refelexiveRemote(context).setSelectedItem(ReflexiveRemoteManager.this,selectedItem);
+				response.value = refelexiveRemote(context).setSelectedItem(ReflexiveRemoteManager.this, itemSelected);
+			}
+		});
+		
+	}
+	
+	@Override
+	public void homeSelectedItem(final DataResponse<Boolean> response,
+			final Context context,final String homeItem) {
+		mHandler.post(new Command<Boolean>(response, this){
+			@Override
+			public void doRun() throws Exception { 
+				response.value = refelexiveRemote(context).gethomeItem(ReflexiveRemoteManager.this, homeItem);
 			}
 		});
 		

@@ -149,4 +149,10 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 		return listItemsDisplayed;
 
 	}
+
+	@Override
+	public Boolean gethomeItem(INotifiableManager manager, String homeItem) {
+		return mConnection.getString(manager, "GUI.ActivateWindow", obj().p("window",homeItem)).equals("OK");
+		
+	}
 }

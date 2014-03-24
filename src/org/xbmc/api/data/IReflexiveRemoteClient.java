@@ -19,4 +19,5 @@ public interface IReflexiveRemoteClient extends IClient {
 	public  ArrayList<Addon> getPlugins (INotifiableManager manager);
 	public  ArrayList<ListItemType> getCurrentListDisplayed(INotifiableManager manager);
 	public  ArrayList<ListItemType> setSelectedItem(INotifiableManager manager,String selectedItem);
+	public Boolean gethomeItem(INotifiableManager manager,String homeItem);
 }
