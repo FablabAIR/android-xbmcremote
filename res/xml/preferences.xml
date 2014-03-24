@@ -93,6 +93,11 @@
 			android:title="Show PVR"
 			android:summary="Display the PVR Button"
 			android:enabled="true" android:defaultValue="false" />
+		<CheckBoxPreference
+			android:key="setting_show_home_disk"
+			android:title="Play Disk"
+			android:summary="Display the Disk Button"
+			android:enabled="true" android:defaultValue="false" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Screen Behaviour">
 		<ListPreference
