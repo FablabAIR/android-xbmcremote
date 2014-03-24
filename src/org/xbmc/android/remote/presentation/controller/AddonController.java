@@ -56,7 +56,7 @@ public class AddonController extends ListController implements IController {
 				fillUpAddon();
 			}
 			else{
-				fillUpItem();
+				fillUpItem(mActivity.getIntent().getStringExtra("itemString"));
 			}
 
 			activity.registerForContextMenu(mList);
@@ -79,6 +79,7 @@ public class AddonController extends ListController implements IController {
 					Intent intent = new Intent(mActivity, ListActivity.class);
 					intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonController());
 					intent.putExtra("first", 1);
+					intent.putExtra("itemString",((ListItemType) mList.getItemAtPosition(position)).getName());
 					mActivity.startActivity(intent);
 					mActivity.finish();
 					
@@ -135,9 +136,10 @@ public class AddonController extends ListController implements IController {
 		mReflexiveManager.GetCurrentListDisplayed(mediaListHandler,mActivity.getApplicationContext());
 	}
 
-	private void fillUpItem() {
+	private void fillUpItem(String item) {
 		mFileItems = null;
-		mList.setTextFilterEnabled(false);
+
+		//mList.setTextFilterEnabled(true);
 		setTitle("Addons");
 		showOnLoading();
 		DataResponse<ArrayList<ListItemType>> mediaListHandler = new DataResponse<ArrayList<ListItemType>>() {
@@ -156,7 +158,8 @@ public class AddonController extends ListController implements IController {
 				}
 			}
 		};
-		mReflexiveManager.setSelectedItem(mediaListHandler,mActivity.getApplicationContext(),mList.getSelectedItem().toString());
+		System.out.println(item);
+		mReflexiveManager.setSelectedItem(mediaListHandler,mActivity.getApplicationContext(),item);
 	}
 
 	public void setListAdapter(ListAdapter adapter) {

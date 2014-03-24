@@ -32,6 +32,6 @@ public interface IReflexiveRemoteManager extends IManager {
 	
 	public void setSelectedItem(final DataResponse<ArrayList<ListItemType>> response, final Context context, final String selectedItem);
 
-	public void homeSelectedItem(DataResponse<Boolean> response, Context context,String addonid);
+	public void homeSelectedItem(final DataResponse<Boolean> response, final Context context,final String addonid);
 
 }

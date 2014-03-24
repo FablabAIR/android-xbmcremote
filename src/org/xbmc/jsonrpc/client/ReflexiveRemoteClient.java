@@ -132,8 +132,8 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 	
 	@Override
 	public ArrayList<ListItemType> setSelectedItem(INotifiableManager manager,String selectedItem){
+
 		mConnection.getString(manager, "GUI.NavigateInListItem", obj().p("SelectedItem",selectedItem));
-	//	mConnection.getString(manager, "GUI.NavigateInListItem", null).equals("OK");
 
 		ArrayList<ListItemType> listItemsDisplayed = new ArrayList<ListItemType>();
 		final JsonNode result = mConnection.getJson(manager, "GUI.GetCurrentListDisplayed", obj());
@@ -152,7 +152,12 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 
 	@Override
 	public Boolean gethomeItem(INotifiableManager manager, String homeItem) {
-		return mConnection.getString(manager, "GUI.ActivateWindow", obj().p("window",homeItem)).equals("OK");
+		if(homeItem.equals("disk")){
+			return mConnection.getString(manager, "Player.Open", obj().p("item",obj().p("directory","cdda://local/"))).equals("OK");
+		}else{
+			return mConnection.getString(manager, "GUI.ActivateWindow", obj().p("window",homeItem)).equals("OK");
+
+		}
 		
 	}
 }

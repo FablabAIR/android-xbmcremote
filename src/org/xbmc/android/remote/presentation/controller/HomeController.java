@@ -130,7 +130,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 	
 	private HomeAdapter mHomeMenu;
 	private HomeAdapter mOfflineMenu;
-	
+	private IReflexiveRemoteManager mReflexiveRemote;
 	private int mNumCoversDownloaded = 0;
 	
 	private WolCounter mWolCounter;
@@ -141,6 +141,7 @@ public class HomeController extends AbstractController implements INotifiableCon
     
 	public HomeController(Activity activity, Handler handler, GridView menuGrid) {
 		super.onCreate(activity, handler);
+		mReflexiveRemote = ManagerFactory.getReflexiveRemoteManager(this);
 		mInfoManager = ManagerFactory.getInfoManager(this);
 		mMenuGrid = menuGrid;
 		listMenu = new ArrayList<Integer>(Arrays.asList(1,3,4,5,9,10));
@@ -243,7 +244,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 				}
 			}
 		};
-		IReflexiveRemoteManager mReflexiveRemote = ManagerFactory.getReflexiveRemoteManager(this);
+
 		mReflexiveRemote.getActivities(responseMenuItem, mActivity.getApplicationContext());
 
 		prefs.registerOnSharedPreferenceChangeListener(this);
@@ -361,6 +362,15 @@ public class HomeController extends AbstractController implements INotifiableCon
 				HomeItem item = (HomeItem)listView.getAdapter().getItem(position);
 				final Host host = HostFactory.host;
 				Intent intent = null;
+				DataResponse<Boolean> activateWindow = new DataResponse<Boolean>() {
+                    public void run() {
+                        if (value) {
+                            System.err.println("Execution Plugin OK");
+                        } else {
+                            System.out.println("Execution Plugin Failed");
+                        }
+                    }
+                };
 				switch (item.ID) {
 					case HOME_ACTION_REMOTE:
 						final int mode = mActivity.getSharedPreferences("global", Context.MODE_PRIVATE).getInt(RemoteController.LAST_REMOTE_PREFNAME, -1);
@@ -414,12 +424,15 @@ public class HomeController extends AbstractController implements INotifiableCon
 						intent.putExtra(ListController.EXTRA_LIST_CONTROLLER, new AddonListController());
 						break;
 					case HOME_ACTION_WEATHER:
+		                mReflexiveRemote.homeSelectedItem(activateWindow,mActivity.getApplicationContext(),"weather");
 						intent = new Intent(v.getContext(),RemoteActivity.class);
 						break;
 					case HOME_ACTION_PVR:
+		                mReflexiveRemote.homeSelectedItem(activateWindow,mActivity.getApplicationContext(),"pvr");
 						intent = new Intent(v.getContext(),RemoteActivity.class);
 						break;
 					case HOME_ACTION_DISK:
+		                mReflexiveRemote.homeSelectedItem(activateWindow,mActivity.getApplicationContext(),"disk");
 						intent = new Intent(v.getContext(),RemoteActivity.class);
 						break;
 				}
