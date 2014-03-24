@@ -326,6 +326,12 @@ public class HomeController extends AbstractController implements INotifiableCon
 				PreferenceManager.setDefaultValues(mActivity.getApplicationContext(), "setting_show_home_pvr", menu, R.xml.preferences, true);
 			}
 			break;
+		case 13:
+			if (prefs.getBoolean("setting_show_home_disk", true)){
+				homeItems.add(new HomeItem(HOME_ACTION_DISK, R.drawable.icon_home_addon, "Disk", "Play the"));
+				PreferenceManager.setDefaultValues(mActivity.getApplicationContext(), "setting_show_home_pvr", menu, R.xml.preferences, true);
+			}
+			break;
 		default:
 			break;
 		}
@@ -411,6 +417,9 @@ public class HomeController extends AbstractController implements INotifiableCon
 						intent = new Intent(v.getContext(),RemoteActivity.class);
 						break;
 					case HOME_ACTION_PVR:
+						intent = new Intent(v.getContext(),RemoteActivity.class);
+						break;
+					case HOME_ACTION_DISK:
 						intent = new Intent(v.getContext(),RemoteActivity.class);
 						break;
 				}
