@@ -144,7 +144,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 		mReflexiveRemote = ManagerFactory.getReflexiveRemoteManager(this);
 		mInfoManager = ManagerFactory.getInfoManager(this);
 		mMenuGrid = menuGrid;
-		listMenu = new ArrayList<Integer>(Arrays.asList(1,3,4,5,9,10));
+		listMenu = new ArrayList<Integer>();
 		setupMenuItems(menuGrid);
 		
 	}
@@ -191,6 +191,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 						Toast.makeText(mActivity.getApplicationContext(), "Changed host to " + host.toString() + ".", Toast.LENGTH_SHORT).show();
 						ClientFactory.resetClient(host);
 						mInfoManager.getSystemInfo(mUpdateVersionHandler, SystemInfo.SYSTEM_BUILD_VERSION, mActivity.getApplicationContext());
+						setupMenuItems(menuGrid);
 					}
 				}
 			});
@@ -203,6 +204,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 			mActivity.startActivity(intent);
 		}
 	}
+
 	
 	public void setupVersionHandler(final Handler handler, final Button versionTextView, final GridView homeItemGrid) {
 		mUpdateVersionHandler = new DataResponse<String>() {
@@ -403,6 +405,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 						((Button)mActivity.findViewById(R.id.home_version_button)).setText("Reconnecting...");
 						ClientFactory.resetClient(host);
 						mInfoManager.getSystemInfo(mUpdateVersionHandler, SystemInfo.SYSTEM_BUILD_VERSION, mActivity.getApplicationContext());
+						setupMenuItems(mMenuGrid);
 						break;
 					case HOME_ACTION_WOL:
 						WakeOnLan wol = new WakeOnLan();

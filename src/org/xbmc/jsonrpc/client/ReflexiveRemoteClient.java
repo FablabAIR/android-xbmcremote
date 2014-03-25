@@ -56,7 +56,7 @@ public class ReflexiveRemoteClient extends Client implements IReflexiveRemoteCli
 		 int tmp = -1 ; 
 		 for (String menuItem : listMainItems) {
 			 tmp = getMenuInt(menuItem);
-			 if(tmp != -1)
+			 if(tmp != -1 && !mainMenu.contains(tmp))
 				 {
 				 	mainMenu.add(tmp);
 				 }
