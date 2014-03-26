@@ -255,7 +255,7 @@ public class HomeController extends AbstractController implements INotifiableCon
 		
 		homeItems.add(new HomeItem(HOME_ACTION_NOWPLAYING, R.drawable.icon_home_playing, "Now Playing", "See what's"));
 		homeItems.add(remote);
-		
+		homeItems.add(new HomeItem(HOME_ACTION_NFC, R.drawable.icon_home_nfc, "NFC", "Browse your"));
 		final ArrayList<HomeItem> offlineItems = new ArrayList<HomeItem>();
 		offlineItems.add(remote);
 		offlineItems.add(new HomeItem(HOME_ACTION_RECONNECT, R.drawable.icon_home_reconnect, "Connect", "Try again to"));
